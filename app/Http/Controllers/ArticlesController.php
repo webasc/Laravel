@@ -15,7 +15,7 @@ class ArticlesController extends Controller {
 
     public function __construct()
     {
-        $this->middleware('auth', ['except' => 'index']);
+        $this->middleware('auth', ['only' => 'create']);
     }
 
 	public function index()
@@ -26,9 +26,12 @@ class ArticlesController extends Controller {
         return view('articles.index', compact('articles'));
     }
 
-    public function show($id)
+    /**
+     * @param Article $article
+     * @return \Illuminate\View\View
+     */
+    public function show(Article $article)
     {
-        $article = Article::findOrFail($id);
 
         return view('articles.show', compact('article'));
     }
@@ -48,16 +51,22 @@ class ArticlesController extends Controller {
         return redirect('articles');
     }
 
-    public function edit($id)
+    /**
+     * @param Article $article
+     * @return \Illuminate\View\View
+     */
+    public function edit(Article $article)
     {
-        $article = Article::findOrFail($id);
-
         return view('articles.edit', compact('article'));
     }
 
-    public function update($id, ArticleRequest $request)
+    /**
+     * @param Article $article
+     * @param ArticleRequest $request
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
+    public function update(Article $article, ArticleRequest $request)
     {
-        $article = Article::findOrFail($id);
 
         $article->update($request->all());
 
